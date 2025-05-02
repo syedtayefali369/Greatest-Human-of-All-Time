@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seerah | The Light of Mankind</title>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c5f2d;
+            --secondary-color: #ffd700;
+            --accent-color: #8b0000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Playfair Display', serif;
+        }
+
+        body {
+            background: linear-gradient(45deg, #f8f8f8, #fff);
+            overflow-x: hidden;
+        }
+
+        .hero-section {
+            height: 100vh;
+            position: relative;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+                        url('islamic-pattern.jpg');
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .particles-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .hero-content {
+            text-align: center;
+            color: white;
+            z-index: 2;
+            position: relative;
+        }
+
+        .animated-title {
+            font-size: 4rem;
+            background: linear-gradient(45deg, var(--secondary-color), #fff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: titleFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes titleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .timeline-section {
+            padding: 5rem 0;
+            background: url('gold-texture.jpg');
+            position: relative;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 2rem;
+            margin: 2rem auto;
+            width: 80%;
+            background: rgba(255,255,255,0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease-out;
+        }
+
+        .timeline-item.visible {
+            transform: translateX(0);
+        }
+
+        .hologram-card {
+            position: relative;
+            perspective: 1000px;
+            transition: transform 0.3s;
+        }
+
+        .hologram-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+        }
+
+        .quran-verse {
+            font-size: 1.2rem;
+            padding: 2rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 10px;
+            position: relative;
+            margin: 2rem 0;
+            transform-style: preserve-3d;
+        }
+
+        .floating-nav {
+            position: fixed;
+            top: 50%;
+            right: 2rem;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+
+        .floating-nav a {
+            display: block;
+            margin: 1rem 0;
+            width: 50px;
+            height: 50px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+
+        .floating-nav a:hover {
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 768px) {
+            .animated-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Navigation -->
+    <nav class="floating-nav">
+        <a href="#home"><i class="fas fa-mosque"></i></a>
+        <a href="#timeline"><i class="fas fa-history"></i></a>
+        <a href="#teachings"><i class="fas fa-book"></i></a>
+        <a href="#gallery"><i class="fas fa-camera"></i></a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="home">
+        <canvas class="particles-canvas"></canvas>
+        <div class="hero-content" data-aos="zoom-in">
+            <h1 class="animated-title">Prophet Muhammad ﷺ</h1>
+            <p class="subtitle" data-aos="fade-up" data-aos-delay="300">The Final Messenger of Allah</p>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="timeline-section" id="timeline">
+        <div class="timeline-item" data-aos="fade-right">
+            <h2>Birth in Mecca</h2>
+            <p>570 CE - Born in the year of the Elephant</p>
+            <div class="hologram-card">
+                <img src="mecca.jpg" alt="Ancient Mecca" class="hologram-image">
+            </div>
+        </div>
+        <!-- More timeline items -->
+    </section>
+
+    <!-- Interactive Quran Section -->
+    <section class="quran-section">
+        <div class="quran-verse" data-aos="flip-up">
+            <p>"Indeed, in the Messenger of Allah you have an excellent example..."</p>
+            <p class="verse-reference">Quran 33:21</p>
+        </div>
+    </section>
+
+    <!-- 3D Gallery -->
+    <section class="holographic-gallery">
+        <div class="gallery-item" data-aos="zoom-in">
+            <model-viewer src="kaaba.glb" alt="3D model of Kaaba" auto-rotate camera-controls></model-viewer>
+        </div>
+    </section>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: false,
+            mirror: true
+        });
+
+        // Particles Animation
+        class Particle {
+            constructor(canvas) {
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+                this.particles = [];
+                this.init();
+            }
+
+            init() {
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                
+                for(let i = 0; i < 100; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        size: Math.random() * 3 + 1,
+                        speedX: Math.random() * 3 - 1.5,
+                        speedY: Math.random() * 3 - 1.5
+                    });
+                }
+
+                this.animate();
+            }
+
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+
+            animate() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                this.particles.forEach(particle => {
+                    particle.x += particle.speedX;
+                    particle.y += particle.speedY;
+
+                    if(particle.x > this.canvas.width) particle.x = 0;
+                    if(particle.x < 0) particle.x = this.canvas.width;
+                    if(particle.y > this.canvas.height) particle.y = 0;
+                    if(particle.y < 0) particle.y = this.canvas.height;
+
+                    this.ctx.fillStyle = 'rgba(255,255,255,0.5)';
+                    this.ctx.beginPath();
+                    this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    this.ctx.fill();
+                });
+
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        const canvas = document.querySelector('.particles-canvas');
+        new Particle(canvas);
+    </script>
+</body>
+</html>
